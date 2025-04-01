@@ -10,6 +10,9 @@ pygame.init()
 #create the starting pieces
 bgs.createPieces()
 
+#create the rectangles
+bgs.createSpaces()
+
 while c.running:
     for event in pygame.event.get():
         if event.type==pygame.QUIT: 

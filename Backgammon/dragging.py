@@ -12,6 +12,7 @@ def checkDragClick():
             c.drag_color = c.color
             c.blackPieces.remove(piece)
             c.drag_pieces.append([c.drag_color,piece[0],piece[1]])
+            c.initialPos = [c.drag_color,piece[0],piece[1]]
             pieceClicked = True
             break
     if(not pieceClicked):
@@ -44,4 +45,4 @@ def checkDragging():
 
         
 def isValidMove(position):
-    pass
+    return True

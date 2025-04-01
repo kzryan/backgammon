@@ -175,6 +175,14 @@ def createPieces():
     c.whitePieces.append([newCenter, c.radius])
     newY = c.height - 1.3*c.radius-diameter*(3)
     newCenter = [c.width-c.spacing1/2,newY]
+
+
+def createSpaces():
+     x,y = 0,0
+     for i in range(6):
+          c.spaces.append(pygame.Rect(x, y, c.spacing1, c.height/2))
+          x += c.spacing1
+              
     
 #Draws each piece, called every frame
 def drawEverything():
@@ -191,3 +199,6 @@ def drawEverything():
         
     for piece in c.drag_pieces:
         pygame.draw.circle(c.myScreen,piece[0],piece[1],piece[2])
+
+    for rectangle in c.spaces: 
+         pygame.draw.rect(c.myScreen,c.color,rectangle)
