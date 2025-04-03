@@ -92,41 +92,41 @@ def createPieces():
     #drawing leftmost black pieces
     diameter = 2*c.radius
     center = [c.spacing1/2,1.3*c.radius]
-    c.blackPieces.append((center,c.radius))
+    c.blackPieces.append([center,c.radius,12])
     newY = 1.3*c.radius + diameter
     newCenter = [c.spacing1/2,newY]
     for i in range (4):
-            c.blackPieces.append([newCenter, c.radius])
+            c.blackPieces.append([newCenter, c.radius, 12])
             newY = 1.3*c.radius+diameter*(i+2)
             newCenter = [c.spacing1/2,newY]
 
     #drawing middle left black pieces
     center = [c.spacing1*4.5, c.height - 1.3*c.radius]
-    c.blackPieces.append((center,c.radius))
+    c.blackPieces.append([center,c.radius,7])
     newY = c.height - 1.3*c.radius - diameter
     newCenter = [c.spacing1*4.5,newY]
     for i in range (2):
-            c.blackPieces.append([newCenter, c.radius])
+            c.blackPieces.append([newCenter, c.radius, 7])
             newY = c.height - 1.3*c.radius - diameter*(i+2)
             newCenter = [c.spacing1*4.5,newY]
 
     #drawing middle right black pieces
     center = [c.spacing1*8.5, c.height - 1.3*c.radius]
-    c.blackPieces.append((center,c.radius))
+    c.blackPieces.append([center,c.radius, 5])
     newY = c.height - 1.3*c.radius - diameter
     newCenter = [c.spacing1*8.5,newY]
     for i in range (4):
-            c.blackPieces.append([newCenter, c.radius])
+            c.blackPieces.append([newCenter, c.radius, 5])
             newY = c.height - 1.3*c.radius - diameter*(i+2)
             newCenter = [c.spacing1*8.5,newY]
 
     #drawing rightmost black pieces
     diameter = 2*c.radius
     center = [c.width-c.spacing1/2,1.3*c.radius]
-    c.blackPieces.append((center,c.radius))
+    c.blackPieces.append([center,c.radius, 23])
     newY = 1.3*c.radius + diameter
     newCenter = [c.width-c.spacing1/2,newY]
-    c.blackPieces.append([newCenter, c.radius])
+    c.blackPieces.append([newCenter, c.radius, 23])
     newY = 1.3*c.radius+diameter*(3)
     newCenter = [c.width-c.spacing1/2,newY]
 
@@ -135,11 +135,11 @@ def createPieces():
     #drawing leftmost white pieces
     diameter = 2*c.radius
     center = [c.spacing1/2,c.height - 1.3*c.radius]
-    c.whitePieces.append((center,c.radius))
+    c.whitePieces.append([center,c.radius,11])
     newY = c.height - 1.3*c.radius - diameter
     newCenter = [c.spacing1/2,newY]
     for i in range (4):
-            c.whitePieces.append([newCenter, c.radius])
+            c.whitePieces.append([newCenter, c.radius, 11])
             newY = c.height - 1.3*c.radius-diameter*(i+2)
             newCenter = [c.spacing1/2,newY]
 
@@ -147,42 +147,58 @@ def createPieces():
 
     #drawing middle left white pieces
     center = [c.spacing1*4.5, 1.3*c.radius]
-    c.whitePieces.append((center,c.radius))
+    c.whitePieces.append([center,c.radius, 16])
     newY =  1.3*c.radius + diameter
     newCenter = [c.spacing1*4.5,newY]
     for i in range (2):
-            c.whitePieces.append([newCenter, c.radius])
+            c.whitePieces.append([newCenter, c.radius, 16])
             newY =  1.3*c.radius + diameter*(i+2)
             newCenter = [c.spacing1*4.5,newY]
 
     
     #drawing middle right white pieces
     center = [c.spacing1*8.5, 1.3*c.radius]
-    c.whitePieces.append((center,c.radius))
+    c.whitePieces.append([center,c.radius, 18])
     newY =  1.3*c.radius + diameter
     newCenter = [c.spacing1*8.5,newY]
     for i in range (4):
-            c.whitePieces.append([newCenter, c.radius])
+            c.whitePieces.append([newCenter, c.radius, 18])
             newY =  1.3*c.radius + diameter*(i+2)
             newCenter = [c.spacing1*8.5,newY]
     
     #drawing rightmost white pieces
     diameter = 2*c.radius
     center = [c.width-c.spacing1/2, c.height -  1.3*c.radius]
-    c.whitePieces.append((center,c.radius))
+    c.whitePieces.append([center,c.radius, 0])
     newY = c.height - 1.3*c.radius - diameter
     newCenter = [c.width-c.spacing1/2,newY]
-    c.whitePieces.append([newCenter, c.radius])
+    c.whitePieces.append([newCenter, c.radius,0])
     newY = c.height - 1.3*c.radius-diameter*(3)
     newCenter = [c.width-c.spacing1/2,newY]
 
 
 def createSpaces():
-     x,y = 0,0
-     for i in range(6):
-          c.spaces.append(pygame.Rect(x, y, c.spacing1, c.height/2))
-          x += c.spacing1
-              
+    y=c.height/2
+    x=c.width - c.spacing1
+    for i in range(6):
+        c.spaces.append(pygame.Rect(x, y, c.spacing1, c.height/2))
+        x -= c.spacing1
+
+    x=c.spacing1 * 5
+    for i in range(6):
+        c.spaces.append(pygame.Rect(x, y, c.spacing1, c.height/2))
+        x -= c.spacing1
+
+    x, y = 0, 0
+    for i in range(6):
+        c.spaces.append(pygame.Rect(x, y, c.spacing1, c.height/2))
+        x += c.spacing1
+
+    x+=2*c.spacing1
+    for i in range(6):
+        c.spaces.append(pygame.Rect(x, y, c.spacing1, c.height/2))
+        x += c.spacing1
+     
     
 #Draws each piece, called every frame
 def drawEverything():
@@ -200,5 +216,7 @@ def drawEverything():
     for piece in c.drag_pieces:
         pygame.draw.circle(c.myScreen,piece[0],piece[1],piece[2])
 
+    '''
     for rectangle in c.spaces: 
          pygame.draw.rect(c.myScreen,c.color,rectangle)
+    '''

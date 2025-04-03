@@ -5,7 +5,7 @@ import config as c
 import dragging as d
 
 #initialize pygame
-pygame.init()
+#pygame.init()
 
 #create the starting pieces
 bgs.createPieces()
@@ -34,7 +34,3 @@ while c.running:
 
 pygame.quit()
 sys.exit()
-
-
-#if the piece(s) is available to move AND the number of spaces moved equals the dice roll, then move
-#if it doesn't the move is invalid

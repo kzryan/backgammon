@@ -11,7 +11,7 @@ def checkDragClick():
             c.is_dragging = True
             c.drag_color = c.color
             c.blackPieces.remove(piece)
-            c.drag_pieces.append([c.drag_color,piece[0],piece[1]])
+            c.drag_pieces.append([c.drag_color,piece[0],piece[1],piece[2]])
             c.initialPos = [c.drag_color,piece[0],piece[1]]
             pieceClicked = True
             break
@@ -21,7 +21,7 @@ def checkDragClick():
                 c.is_dragging = True
                 c.drag_color = c.gray
                 c.whitePieces.remove(piece)
-                c.drag_pieces.append([c.drag_color,piece[0],piece[1]])
+                c.drag_pieces.append([c.drag_color,piece[0],piece[1],piece[2]])
                 break
 
 def checkDragRelease():
@@ -45,4 +45,6 @@ def checkDragging():
 
         
 def isValidMove(position):
-    return True
+    for space in c.spaces:
+        if space.collidepoint(position[1][0],position[1][1]):
+            print("the piece is in "+str(c.spaces.index(space)))
