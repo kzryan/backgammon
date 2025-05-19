@@ -13,8 +13,8 @@ dragging=False
 running=True
 dragPieces=[]
 intialdrag=[]
-width = 1500
-height = 1100
+width = 1000
+height = 734
 radius=height/24
 diameter=height/12
 spacing1=width/14
@@ -33,3 +33,4 @@ intial_pos=[]
 #These are the imagineary rectatgles that make up spaces on the board
 spaces=[]
 secondSpace=-1
+movesLeft=totalRoll
