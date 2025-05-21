@@ -53,10 +53,12 @@ def CheckDragRelease():
         print("The space you are moving to is : "+str(NewSpace))
         if (NewSpace):
             print("valid move")
+            newSpaceX = c.spaces[NewSpace].center[0]
+            newSpaceY = findY(NewSpace)
             if (FinalPos[0]==c.gray):
-                c.whitepieces.append([FinalPos[1],FinalPos[2],NewSpace])
+                c.whitepieces.append([[newSpaceX, newSpaceY],FinalPos[2],NewSpace])
             else:
-                c.blackpieces.append([FinalPos[1],FinalPos[2],NewSpace])
+                c.blackpieces.append([[newSpaceX, newSpaceY],FinalPos[2],NewSpace])
         else:
             print("not valid ")
             if (FinalPos[0]==c.gray):
@@ -76,7 +78,7 @@ def CheckDragging():
 def getFirstSpot(pos):
     newSpot=None
     for space in c.spaces:
-        if space.collidepoint(pos[1][0],pos[1][1]):
+        if space.collidepoint(pos[1]):
             newSpot=c.spaces.index(space)
             print("the piece is being moved to (first spot the piece touches) "+str(newSpot))
             print("the piece is being moved to (second spot the piece touches) "+str(newSpot+1))
@@ -94,18 +96,39 @@ def isValidMove(newSpot,pos):
     oldspot=pos[3]
     print("total roll = "+str(c.totalRoll))
     print("moves left = "+str(c.movesLeft))
-    
+    #If the piece is black
     if color==c.color:
         print("oldspot - newSpot = "+str((oldspot-newSpot)))
-        if ((oldspot-newSpot)>0) and (oldspot-newSpot <= c.movesLeft):
-            c.movesLeft -= oldspot-newSpot
+        wp = []
+        for piece in c.whitepieces:
+            if piece[2] == newSpot:
+                wp.append(piece)
+        if len(wp) == 1:
+            capture(wp[0],color)
+        if ((oldspot-newSpot)>0) and (oldspot-newSpot <= c.movesLeft) and (oldspot-newSpot == c.roll1[1] or oldspot-newSpot == c.roll2[1])and len(wp)<2:
+            moves = oldspot-newSpot
+            print("Subtracting moves left by: "+str(moves))
+            #check if 2 or more gray pieces are there
+            c.movesLeft -= moves
             return newSpot
+    #If the piece is gray 
     elif color==c.gray:
         print("newspot - oldspot = "+str((newSpot-oldspot)))
-        if ((newSpot-oldspot)>0) and (newSpot-oldspot <= c.movesLeft):
-            c.movesLeft -= newSpot-oldspot
+        bp = []
+        for piece in c.whitepieces:
+            if piece[2] == newSpot:
+                bp.append(piece)
+        if len(bp) == 1:
+            capture(bp[0],color)
+        if ((newSpot-oldspot)>0) and (newSpot-oldspot <= c.movesLeft) and (newSpot-oldspot == c.roll1[1] or newSpot-oldspot == c.roll2[1])and len(bp)<2:
+            moves = newSpot-oldspot
+            #check if 2 or more black pieces are there
+            print("Subtracting moves left by: "+str(moves))
+            c.movesLeft -= moves
             return newSpot
         else:
+            return False
+    else:
             return False
         
 def findclosestspace(piece,space):
@@ -122,3 +145,29 @@ def findclosestspace(piece,space):
             print("closer to the lower piece")
             return space
     return space
+
+def findY(space):
+    count = 0
+    for piece in c.whitepieces:
+        if(piece[2]==space):
+            count+=1
+    for piece in c.blackpieces:
+        if(piece[2]==space):
+            count+=1
+    if (space <= 11):
+        return c.height - c.diameter*count - c.radius
+    elif (space > 11):
+        return c.diameter*count +c.radius
+    else:
+        return 0
+    
+def capture(piece,color):
+    if color == c.color:
+        c.whitepieces.remove(piece)
+    elif color == c.gray:
+        c.blackpieces.remove(piece)
+    
+
+
+#Add block space rules
+#Add capture rules
