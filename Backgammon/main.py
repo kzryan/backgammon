@@ -6,8 +6,6 @@ import dragging as d
 #pygame.init()
 #Variables
 
-
-
 b.drawBlackPieces()
 b.drawTri()
 b.CreateSpaces()

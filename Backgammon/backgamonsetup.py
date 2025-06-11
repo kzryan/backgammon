@@ -127,7 +127,7 @@ def drawBlackPieces():
             c.blackpieces.append([newCenter, c.radius,12])
             newY=1.3*c.radius+diameter*(i+2)
             newCenter=[c.spacing1/2,newY]
-        #drawing middle left black pieces
+    #drawing middle left black pieces
     Center=[c.spacing1*4.5, c.height-1.3*c.radius]
     c.blackpieces.append([Center, c.radius,7])
     newY=c.height-1.3*c.radius-diameter
@@ -136,7 +136,7 @@ def drawBlackPieces():
             c.blackpieces.append([newCenter,c.radius,7])
             newY=c.height-1.3*c.radius-diameter*(i+2)
             newCenter=[c.spacing1*4.5,newY]
-#drawing middle right black pieces
+   #drawing middle right black pieces
     Center=[c.spacing1*8.5, c.height-1.3*c.radius]
     c.blackpieces.append([Center, c.radius,5])
     newY=c.height-1.3*c.radius-diameter
@@ -218,6 +218,7 @@ def CreateSpaces():
     for i in range(6):
         c.spaces.append(pygame.Rect(x,y,c.spacing1,c.height/2))
         x+=c.spacing1
+
 def DrawEverything():
     pygame.draw.rect(c.myScreen, c.color, pygame.Rect((0,0),(c.width,c.height)), 7)
 
@@ -232,10 +233,38 @@ def DrawEverything():
     
     for piece in c.dragPieces:
          pygame.draw.circle(c.myScreen, piece[0], piece[1], piece[2])
-         
-    '''for rectangle in c.spaces:
-        pygame.draw.rect(c.myScreen, c.color,rectangle)'''
+
+    drawDeadpieces()
+    for rect in c.whitedeadRectangles:
+         print("Drawing dead rect")
+         pygame.draw.rect(c.myScreen,rect[1],rect[0])
+    for rect in c.blackdeadRectangles:
+         print("Drawing dead rect")
+         pygame.draw.rect(c.myScreen,rect[1],rect[0])
+    
     
     c.myScreen.blit(c.roll1[0], (6.10*c.spacing1, c.height/2.75))
     c.myScreen.blit(c.roll2[0], (7.13*c.spacing1, c.height/2.75))
     c.myScreen.blit(c.Roll, (649,649))
+
+def drawDeadpieces():
+     wleft = c.spacing1*6
+     ctop = 10
+     width = c.spacing1/2
+     height = 20
+     c.whitedeadRectangles = []
+     c.blackdeadRectangles = []
+
+     for piece in c.deadpieces:
+          if piece[1]==c.gray:
+            c.whitedeadRectangles.append((pygame.Rect(wleft,ctop,width,height),piece[1]))
+            ctop+=30
+
+     btop = 10
+     bleft = wleft+width
+     for piece in c.deadpieces:
+          if piece[1]==c.color:
+            c.blackdeadRectangles.append((pygame.Rect(bleft,btop,width,height),piece[1]))
+            btop+=30
+
+    
