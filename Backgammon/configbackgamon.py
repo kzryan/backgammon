@@ -37,3 +37,7 @@ intial_pos=[]
 spaces=[]
 secondSpace=-1
 movesLeft=totalRoll
+whitedeadpiece = False
+blackdeadpiece = False
+whiteturn = False
+blackturn = False

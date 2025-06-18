@@ -32,6 +32,20 @@ def reRoll():
         c.totalRoll*=2
     c.movesLeft = c.totalRoll
 
+def checkTurn():
+     if(c.roll1[1]>c.roll2[1]):
+          c.blackturn = True
+          print("its black's turn")
+          return c.blackturn
+     elif(c.roll2[1].c.roll1[1]):
+          c.whiteturn = True
+          print("its white's turn")
+          return c.whiteturn
+     else:
+          #tie
+          reRoll()
+          checkTurn()
+
 def CircleClick(circle_x, circle_y, radius, mouse_x, mouse_y):
      
      distance=((circle_x-mouse_x)**2+(circle_y-mouse_y)**2)**0.5

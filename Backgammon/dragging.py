@@ -29,6 +29,10 @@ def CheckDragClick():
                 c.dragPieces.append([c.draggingColor, piece[0], piece[1],piece[2]])
                 c.intial_pos=[c.draggingColor, piece[0], piece[1], piece[2]]
                 break
+    if(c.whitedeadpiece):
+        pass
+    if(c.blackdeadpiece):
+        pass
                 
 def CheckDragRelease():
     #drawing=False
@@ -97,7 +101,7 @@ def isValidMove(newSpot,pos):
     print("total roll = "+str(c.totalRoll))
     print("moves left = "+str(c.movesLeft))
     #If the piece is black
-    if color==c.color:
+    if color==c.color and c.blackturn:
         print("oldspot - newSpot = "+str((oldspot-newSpot)))
         wp = []
         for piece in c.whitepieces:
@@ -113,9 +117,11 @@ def isValidMove(newSpot,pos):
                 capture(wp[0],color)
             return newSpot
         else:
+            #insert code to check if theres a dead piece
+            #c.blackdeadpiece = True
             return -1
     #If the piece is gray 
-    elif color==c.gray:
+    elif color==c.gray and c.whiteturn:
         print("newspot - oldspot = "+str((newSpot-oldspot)))
         bp = []
         for piece in c.blackpieces:
@@ -131,6 +137,8 @@ def isValidMove(newSpot,pos):
                 capture(bp[0],color)
             return newSpot
         else:
+            #insert code to check if theres a dead piece
+            #c.whitedeadpiece = True
             return -1
     else:
             return -1
