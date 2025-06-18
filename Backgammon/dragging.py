@@ -8,7 +8,6 @@ def CheckDragClick():
     pieceClicked=False
     if c.rollRect.collidepoint(mouse_x,mouse_y):
         b.reRoll()
-        print("totalRoll = "+str(c.totalRoll))
     for piece in c.blackpieces:
             if b.CircleClick(piece[0][0],piece[0][1],piece[1],mouse_x,mouse_y):
                 c.dragging=True
@@ -40,13 +39,13 @@ def CheckDragRelease():
     if(len(c.dragPieces)>0):
         FinalPos=c.dragPieces.pop(0)
         if(c.movesLeft == 0):
-            print("NO MOVES LEFT")
+            #print("NO MOVES LEFT")
             if (FinalPos[0]==c.gray):
                 c.whitepieces.append([c.intial_pos[1],c.intial_pos[2],c.intial_pos[3]])
             else:
                 c.blackpieces.append([c.intial_pos[1],c.intial_pos[2],c.intial_pos[3]])
             return
-        print("the piece is being moved from"+str(FinalPos[3]))
+        #print("the piece is being moved from"+str(FinalPos[3]))
         #calc first closest space
         FinalSpot=getFirstSpot(FinalPos)
         #calc space the piece is closest to if touching 2, redefining final spot
@@ -54,9 +53,9 @@ def CheckDragRelease():
             FinalSpot=findclosestspace(FinalPos,FinalSpot)
         #find if that's a valid move
         NewSpace=isValidMove(FinalSpot,FinalPos)
-        print("The space you are moving to is : "+str(NewSpace))
+        #print("The space you are moving to is : "+str(NewSpace))
         if (NewSpace>=0):
-            print("valid move")
+            #print("valid move")
             newSpaceX = c.spaces[NewSpace].center[0]
             newSpaceY = findY(NewSpace)
             if (FinalPos[0]==c.gray):
@@ -64,7 +63,7 @@ def CheckDragRelease():
             else:
                 c.blackpieces.append([[newSpaceX, newSpaceY],FinalPos[2],NewSpace])
         else:
-            print("not valid ")
+            #print("not valid ")
             if (FinalPos[0]==c.gray):
                 c.whitepieces.append([c.intial_pos[1],c.intial_pos[2],c.intial_pos[3]])
             else:
@@ -84,8 +83,8 @@ def getFirstSpot(pos):
     for space in c.spaces:
         if space.collidepoint(pos[1]):
             newSpot=c.spaces.index(space)
-            print("the piece is being moved to (first spot the piece touches) "+str(newSpot))
-            print("the piece is being moved to (second spot the piece touches) "+str(newSpot+1))
+            #print("the piece is being moved to (first spot the piece touches) "+str(newSpot))
+            #print("the piece is being moved to (second spot the piece touches) "+str(newSpot+1))
             c.secondSpace=newSpot+1
             break
 
@@ -94,23 +93,23 @@ def getFirstSpot(pos):
     return newSpot
 
 def isValidMove(newSpot,pos):
-    print("roll 1: "+str(c.roll1[1]))
-    print("roll 2: "+str(c.roll2[1]))
+    #print("roll 1: "+str(c.roll1[1]))
+    #print("roll 2: "+str(c.roll2[1]))
     color=pos[0]
     oldspot=pos[3]
-    print("total roll = "+str(c.totalRoll))
-    print("moves left = "+str(c.movesLeft))
+    #print("total roll = "+str(c.totalRoll))
+    #print("moves left = "+str(c.movesLeft))
     #If the piece is black
     if color==c.color and c.blackturn:
-        print("oldspot - newSpot = "+str((oldspot-newSpot)))
+        #print("oldspot - newSpot = "+str((oldspot-newSpot)))
         wp = []
         for piece in c.whitepieces:
             if piece[2] == newSpot:
                 wp.append(piece)
-        print("there are "+str(len(wp))+" white pieces already there.")
-        if ((oldspot-newSpot)>0) and (oldspot-newSpot <= c.movesLeft) and (oldspot-newSpot == c.roll1[1] or oldspot-newSpot == c.roll2[1])and len(wp)<2:
+        #print("there are "+str(len(wp))+" white pieces already there.")
+        if ((oldspot-newSpot)>0) and (oldspot-newSpot <= c.movesLeft) and (oldspot-newSpot == c.roll1[1] or oldspot-newSpot == c.roll2[1])and len(wp)<2 and len(c.blackdeadRectangles)==0:
             moves = oldspot-newSpot
-            print("Subtracting moves left by: "+str(moves))
+            #print("Subtracting moves left by: "+str(moves))
             #check if 2 or more gray pieces are there
             c.movesLeft -= moves
             if len(wp) == 1:
@@ -119,28 +118,40 @@ def isValidMove(newSpot,pos):
         else:
             #insert code to check if theres a dead piece
             #c.blackdeadpiece = True
+            if(len(c.blackdeadRectangles) != 0):
+                font = pygame.font.Font(None, 32)
+                text = font.render('Dead Piece', True, (255,255,255), (0,0,0))
+                c.alerts.append(text)
             return -1
     #If the piece is gray 
     elif color==c.gray and c.whiteturn:
-        print("newspot - oldspot = "+str((newSpot-oldspot)))
+        #print("newspot - oldspot = "+str((newSpot-oldspot)))
         bp = []
         for piece in c.blackpieces:
             if piece[2] == newSpot:
                 bp.append(piece)
-        print("there are "+str(len(bp))+" black pieces already there.")
-        if ((newSpot-oldspot)>0) and (newSpot-oldspot <= c.movesLeft) and (newSpot-oldspot == c.roll1[1] or newSpot-oldspot == c.roll2[1])and len(bp)<2:
+        #print("there are "+str(len(bp))+" black pieces already there.")
+        if ((newSpot-oldspot)>0) and (newSpot-oldspot <= c.movesLeft) and (newSpot-oldspot == c.roll1[1] or newSpot-oldspot == c.roll2[1])and len(bp)<2 and len(c.whitedeadRectangles)==0:
             moves = newSpot-oldspot
             #check if 2 or more black pieces are there
-            print("Subtracting moves left by: "+str(moves))
+            #print("Subtracting moves left by: "+str(moves))
             c.movesLeft -= moves
             if len(bp) == 1:
                 capture(bp[0],color)
             return newSpot
         else:
+
             #insert code to check if theres a dead piece
             #c.whitedeadpiece = True
+
+            if(len(c.whitedeadRectangles) != 0):
+                font = pygame.font.Font(None, 32)
+                text = font.render('Dead Piece', True, (255,255,255), (0,0,0))
+                c.alerts.append(text)
+
             return -1
     else:
+            print("Not a valid move, c.blackturn = "+str(c.blackturn)+" and c.whiteturn = "+str(c.whiteturn))
             return -1
         
 def findclosestspace(piece,space):
@@ -151,10 +162,10 @@ def findclosestspace(piece,space):
     if(len(c.spaces)> c.secondSpace):
         centerspace2=c.spaces[c.secondSpace].center
         if math.dist(centerOfPiece,centerSpace1)>math.dist(centerOfPiece,centerspace2):
-            print("closer to the higher piece")
+            #print("closer to the higher piece")
             return c.secondSpace
         else:
-            print("closer to the lower piece")
+            #print("closer to the lower piece")
             return space
     return space
 

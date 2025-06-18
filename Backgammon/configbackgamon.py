@@ -41,3 +41,4 @@ whitedeadpiece = False
 blackdeadpiece = False
 whiteturn = False
 blackturn = False
+alerts = []

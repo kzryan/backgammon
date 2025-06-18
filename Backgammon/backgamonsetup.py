@@ -25,6 +25,14 @@ def diceroll():
         return [pygame.image.load("images/dice6.png"),6]
 
 def reRoll():
+    if(c.movesLeft==0):
+        print("No moves left, switching turns")
+        if(c.whiteturn):
+            c.whiteturn=False
+            c.blackturn=True
+        elif(c.blackturn):
+            c.whiteturn=True
+            c.blackturn=False
     c.roll1 = diceroll()
     c.roll2 = diceroll()
     c.totalRoll=c.roll1[1]+c.roll2[1]
@@ -37,7 +45,7 @@ def checkTurn():
           c.blackturn = True
           print("its black's turn")
           return c.blackturn
-     elif(c.roll2[1].c.roll1[1]):
+     elif(c.roll2[1]<c.roll1[1]):
           c.whiteturn = True
           print("its white's turn")
           return c.whiteturn
@@ -250,11 +258,14 @@ def DrawEverything():
 
     drawDeadpieces()
     for rect in c.whitedeadRectangles:
-         print("Drawing dead rect")
+         #print("Drawing dead rect")
          pygame.draw.rect(c.myScreen,rect[1],rect[0])
     for rect in c.blackdeadRectangles:
-         print("Drawing dead rect")
+         #print("Drawing dead rect")
          pygame.draw.rect(c.myScreen,rect[1],rect[0])
+
+    for alert in c.alerts:
+         c.myScreen.blit(alert,alert.get_rect())
     
     
     c.myScreen.blit(c.roll1[0], (6.10*c.spacing1, c.height/2.75))

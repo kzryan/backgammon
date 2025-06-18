@@ -5,6 +5,7 @@ import dragging as d
 
 #pygame.init()
 #Variables
+pygame.font.init()
 
 b.drawBlackPieces()
 b.drawTri()
@@ -25,15 +26,7 @@ while c.running:
         elif event.type==pygame.MOUSEMOTION:
             d.CheckDragging()
 
-        if(c.movesLeft==0):
-            print("No moves left, switching turns")
-            if(c.whiteturn):
-                c.whiteturn=False
-                c.blackturn=True
-            else:
-                c.whiteturn=True
-                c.blackturn=False
-
+       
 
 
     c.myScreen.fill(c.white)
