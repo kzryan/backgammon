@@ -26,12 +26,10 @@ while c.running:
         elif event.type==pygame.MOUSEMOTION:
             d.CheckDragging()
 
-       
-
 
     c.myScreen.fill(c.white)
     
-
+    d.checkForResummon()
     b.DrawEverything()
 
     pygame.display.flip()
