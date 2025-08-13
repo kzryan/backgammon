@@ -7,8 +7,10 @@ import dragging as d
 #Variables
 pygame.font.init()
 
+
 b.drawBlackPieces()
 b.drawTri()
+
 b.CreateSpaces()
 b.drawWhitePieces()
 b.reRoll()
@@ -19,17 +21,20 @@ while c.running:
     for event in pygame.event.get():
         if event.type==pygame.QUIT: 
             sys.exit()
+
         elif event.type==pygame.MOUSEBUTTONDOWN:
             d.CheckDragClick()
+
         elif event.type==pygame.MOUSEBUTTONUP:
             d.CheckDragRelease()
         elif event.type==pygame.MOUSEMOTION:
             d.CheckDragging()
 
 
+
     c.myScreen.fill(c.white)
     
-    d.checkForResummon()
+
     b.DrawEverything()
 
     pygame.display.flip()

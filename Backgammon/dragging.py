@@ -4,24 +4,22 @@ import backgamonsetup as b
 import math
 
 def CheckDragClick():
-    #Checking for white resummon
-    if(len(c.whitedeadRectangles)>0 and c.whiteturn):
-        c.isResummoningWhite = True
-        print("Listening for resummon click")
-        for space in c.spaces:
-            if space.collidepoint(pygame.mouse.get_pos()): 
-                c.resummonSpot = c.spaces.index(space)
-                break
-
-    #check for black resummon
-    elif(len(c.blackdeadRectangles)>0 and c.blackturn):
-        c.isResummoningBlack = True
-        print("Listening for resummon click")
+    #checking for resummon
+    if(len(c.whitedeadrectangles)>0 and c.whiteTurn):
+        c.isResummoningW=True
+        print("listening for resommon click")
         for space in c.spaces:
             if space.collidepoint(pygame.mouse.get_pos()):
-                c.resummonSpot = c.spaces.index(space)
+                c.resummonSpot=c.spaces.index(space)
                 break
-    #if not resummoning (normal move)
+    elif(len(c.blackdeadrectangles)>0 and c.blackTurn):
+        c.isResummoningB=True
+        print("listening for resommon click")
+        for space in c.spaces:
+            if space.collidepoint(pygame.mouse.get_pos()):
+                c.resummonSpot=c.spaces.index(space)
+                break
+        #if not resummon(Normal move)
     else:
         mouse_x, mouse_y=pygame.mouse.get_pos()
         pieceClicked=False
@@ -48,71 +46,67 @@ def CheckDragClick():
                     c.intial_pos=[c.draggingColor, piece[0], piece[1], piece[2]]
                     break
 
-                
+
+
 def CheckDragRelease():
-    #if we're resummoning white
-    if c.isResummoningWhite:
-        if c.resummonSpot<6 and (c.roll1[1] ==c.resummonSpot+1 or c.roll2[1] == c.resummonSpot+1):
-            print("CheckDragRelease resummoning white")
-            # add capturing
-            bp = []
+    if c.isResummoningW:
+        if  c.resummonSpot<6 and (c.resummonSpot+1 in c.movesLeft):
+            print("checkdragReleaseResummoningwhite")
+            #add capturing
+            bp=[]
             for piece in c.blackpieces:
                 if piece[2] == c.resummonSpot:
                     bp.append(piece)
-            if len(bp) == 1:
-                    print("There is one black piece in resummon spot")
-                    capture(bp[0],c.gray)
-                    center = (c.spaces[c.resummonSpot].x+c.spacing1/2,findY(c.resummonSpot))
-
-            elif len(bp) > 1:
-                #dont allow
+            if len(bp)==1:
+                print("Thereis1BlackPieceInRessumonSpot")
+                capture(bp[0],c.gray)
+                center=(c.spaces[c.resummonSpot].x+c.spacing1/2,findY(c.resummonSpot))
+            elif len(bp)>1:
                 return
             else:
-                center = (c.spaces[c.resummonSpot].x+c.spacing1/2,findY(c.resummonSpot))
+                #dont allow other color to sommun if more than 2 pieces of opposite color
+                center=(c.spaces[c.resummonSpot].x+c.spacing1/2,findY(c.resummonSpot))
 
             c.whitepieces.append([center,c.radius,c.resummonSpot])
             c.whitedeadpieces.pop()
-            c.movesLeft -= c.resummonSpot + 1
-            c.isResummoningWhite = False
-    #if we're resummoning black
-    elif c.isResummoningBlack:
-        if c.resummonSpot>17 and (25-c.roll1[1] ==c.resummonSpot+1 or 25-c.roll2[1] ==c.resummonSpot+1):
-            print("CheckDragRelease resummoning black")
-            wp = []
+            c.alerts.remove(c.resummonWhiteAlert)
+            c.movesLeft.remove(c.resummonSpot+1)
+            #c.movesLeft-=c.resummonSpot+1
+            c.isResummoningW=False
+    elif c.isResummoningB:
+        if c.resummonSpot>17 and (-(c.resummonSpot-24) in c.movesLeft):
+            print("CheckDragRelease BlackisResumoning")
+            wp=[]
             for piece in c.whitepieces:
                 if piece[2] == c.resummonSpot:
                     wp.append(piece)
-            if len(wp) == 1:
-                    print("There is one white piece in resummon spot")
-                    capture(wp[0],c.color)
-                    center = (c.spaces[c.resummonSpot].x+c.spacing1/2,findY(c.resummonSpot))
-            
+            if len(wp)==1:
+                print("Thereis1WhitePieceInRessumonSpot")
+                capture(wp[0],c.color)
+                center=(c.spaces[c.resummonSpot].x+c.spacing1/2,findY(c.resummonSpot))
 
-            elif len(wp) > 1:
-                #dont allow
+            elif len(wp)>1:
                 return
             else:
-                center = (c.spaces[c.resummonSpot].x+c.spacing1/2,findY(c.resummonSpot))
+                center=(c.spaces[c.resummonSpot].x+c.spacing1/2,findY(c.resummonSpot))
 
             c.blackpieces.append([center,c.radius,c.resummonSpot])
             c.blackdeadpieces.pop()
-            c.movesLeft -= 25 - c.resummonSpot - 1
-            c.isResummoningBlack = False
-    #if we're not resummoning (normal move)
+            c.alerts.remove(c.resummonBlackAlert)
+            c.movesLeft.remove(25 - c.resummonSpot - 1)
+            c.isResummoningB=False
     else:
-        print("CheckDragRelease normal move")
-        #drawing=False
+    #drawing=False
+        print("checkdragRelease Normal Move")
         c.dragging=False
         if(len(c.dragPieces)>0):
             FinalPos=c.dragPieces.pop(0)
-            if(c.movesLeft == 0):
-                print("NO MOVES LEFT")
+            if(c.movesLeft == []):
                 if (FinalPos[0]==c.gray):
-                    c.whitepieces.append([c.intial_pos[1],c.intial_pos[2],c.intial_pos[3]])
+                        c.whitepieces.append([c.intial_pos[1],c.intial_pos[2],c.intial_pos[3]])
                 else:
                     c.blackpieces.append([c.intial_pos[1],c.intial_pos[2],c.intial_pos[3]])
                 return
-            #print("the piece is being moved from"+str(FinalPos[3]))
             #calc first closest space
             FinalSpot=getFirstSpot(FinalPos)
             #calc space the piece is closest to if touching 2, redefining final spot
@@ -120,22 +114,19 @@ def CheckDragRelease():
                 FinalSpot=findclosestspace(FinalPos,FinalSpot)
             #find if that's a valid move
             NewSpace=isValidMove(FinalSpot,FinalPos)
-            #print("The space you are moving to is : "+str(NewSpace))
             if (NewSpace>=0):
-                #print("valid move")
-                newSpaceX = c.spaces[NewSpace].center[0]
-                newSpaceY = findY(NewSpace)
+                print("valid move")
+                NewSpaceX=c.spaces[NewSpace].center[0]
+                NewSpaceY=findY(NewSpace)
                 if (FinalPos[0]==c.gray):
-                    c.whitepieces.append([[newSpaceX, newSpaceY],FinalPos[2],NewSpace])
+                    c.whitepieces.append([[NewSpaceX, NewSpaceY],FinalPos[2],NewSpace])
                 else:
-                    c.blackpieces.append([[newSpaceX, newSpaceY],FinalPos[2],NewSpace])
+                    c.blackpieces.append([[NewSpaceX, NewSpaceY],FinalPos[2],NewSpace])
             else:
-                #print("not valid ")
                 if (FinalPos[0]==c.gray):
                     c.whitepieces.append([c.intial_pos[1],c.intial_pos[2],c.intial_pos[3]])
                 else:
                     c.blackpieces.append([c.intial_pos[1],c.intial_pos[2],c.intial_pos[3]])
-
 def CheckDragging():
     mouse_position=pygame.mouse.get_pos()
                 
@@ -151,8 +142,6 @@ def getFirstSpot(pos):
     for space in c.spaces:
         if space.collidepoint(pos[1]):
             newSpot=c.spaces.index(space)
-            #print("the piece is being moved to (first spot the piece touches) "+str(newSpot))
-            #print("the piece is being moved to (second spot the piece touches) "+str(newSpot+1))
             c.secondSpace=newSpot+1
             break
 
@@ -161,91 +150,84 @@ def getFirstSpot(pos):
     return newSpot
 
 def isValidMove(newSpot,pos):
-    #print("roll 1: "+str(c.roll1[1]))
-    #print("roll 2: "+str(c.roll2[1]))
     color=pos[0]
     oldspot=pos[3]
-    #print("total roll = "+str(c.totalRoll))
-    #print("moves left = "+str(c.movesLeft))
-    #If the piece is black
-    if color==c.color and c.blackturn:
-        #print("oldspot - newSpot = "+str((oldspot-newSpot)))
-        wp = []
+    
+    if color==c.color and c.blackTurn:
+        wp=[]
         for piece in c.whitepieces:
             if piece[2] == newSpot:
                 wp.append(piece)
-        #print("there are "+str(len(wp))+" white pieces already there.")
-        if ((oldspot-newSpot)>0) and (oldspot-newSpot <= c.movesLeft) and (oldspot-newSpot == c.roll1[1] or oldspot-newSpot == c.roll2[1])and len(wp)<2 and len(c.blackdeadRectangles)==0:
-            moves = oldspot-newSpot
-            #print("Subtracting moves left by: "+str(moves))
-            #check if 2 or more gray pieces are there
-            c.movesLeft -= moves
-            if len(wp) == 1:
+        if ((oldspot-newSpot)>0) and (oldspot-newSpot in c.movesLeft) and (len(wp)<2) and (len(c.blackdeadrectangles)==0):
+            c.movesLeft.remove(oldspot-newSpot)
+            if len(wp)==1:
                 capture(wp[0],color)
             return newSpot
         else:
+            
             return -1
-    #If the piece is gray 
-    elif color==c.gray and c.whiteturn:
-        #print("newspot - oldspot = "+str((newSpot-oldspot)))
-        bp = []
+    elif color==c.gray and c.whiteTurn:
+        bp=[]
         for piece in c.blackpieces:
             if piece[2] == newSpot:
                 bp.append(piece)
-        #print("there are "+str(len(bp))+" black pieces already there.")
-        if ((newSpot-oldspot)>0) and (newSpot-oldspot <= c.movesLeft) and (newSpot-oldspot == c.roll1[1] or newSpot-oldspot == c.roll2[1])and len(bp)<2 and len(c.whitedeadRectangles)==0:
-            moves = newSpot-oldspot
-            #check if 2 or more black pieces are there
-            #print("Subtracting moves left by: "+str(moves))
-            c.movesLeft -= moves
-            if len(bp) == 1:
+        if ((newSpot-oldspot)>0) and (newSpot-oldspot in c.movesLeft) and (len(bp)<2) and (len(c.whitedeadrectangles)==0):
+            c.movesLeft.remove(newSpot-oldspot)
+            if len(bp)==1:
                 capture(bp[0],color)
             return newSpot
         else:
+            
             return -1
     else:
-            print("No valid moves left")
-            return -1
+        print("No Valid moves left")
+        return -1
         
 def findclosestspace(piece,space):
 #takes the given piece and returns the space it is closest to, the first spot the piece is touching or the one after
     range=c.height/48
     centerOfPiece= piece[1]
     centerSpace1= c.spaces[space].center
-    if(len(c.spaces)>c.secondSpace):
+    if(len(c.spaces)> c.secondSpace):
         centerspace2=c.spaces[c.secondSpace].center
-        if math.dist(centerOfPiece, centerSpace1)>math.dist(centerOfPiece,centerspace2):
+        if math.dist(centerOfPiece,centerSpace1)>math.dist(centerOfPiece,centerspace2):
             return c.secondSpace
         else:
-            print("closer to lower piece")
+            print("closer to the lower piece")
             return space
     return space
 
 def findY(space):
-    count = 0
+    count=0
     for piece in c.whitepieces:
         if(piece[2]==space):
             count+=1
     for piece in c.blackpieces:
         if(piece[2]==space):
             count+=1
+
     if (space <= 11):
-        return c.height - c.diameter*count - c.radius
-    elif (space > 11):
-        return c.diameter*count +c.radius
+        return c.height-c.diameter*count-c.radius
+    elif (space>11):
+        return c.diameter*count+c.radius
     else:
         return 0
     
 def capture(piece,color):
-    if color == c.color:
+    if color==c.color:
         c.whitepieces.remove(piece)
-        print("In capture, adding to white dead pieces")
+        print("In capture adding to white dead pieces")
         c.whitedeadpieces.append((piece))
-    elif color == c.gray:
+    elif color==c.gray:
         c.blackpieces.remove(piece)
-        c.deadpieces.append((piece,c.color))
-    
+        print("in capture adding black dead piece")
+        c.blackdeadpieces.append((piece))
 
-
-#Add block space rules
-#Add capture rules
+def checkForResummon():
+    if len(c.whitedeadrectangles)>0 and c.whiteTurn:
+        c.alerts.append(c.resummonWhiteAlert)
+    if len(c.blackdeadrectangles)>0 and c.blackTurn:
+        c.alerts.append(c.resummonBlackAlert)
+        for space in c.spaces:
+            if space.collidepoint(pygame.mouse.get_pos()) and c.spaces.index(space)>17:
+                pass
