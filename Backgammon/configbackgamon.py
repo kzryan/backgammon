@@ -28,7 +28,7 @@ size = (width,height)
 myScreen=pygame.display.set_mode(size)
 rolledNums = []
 Roll=pygame.image.load("images/diceroll.png")
-Roll=pygame.transform.scale(Roll,(100,100))
+Roll=pygame.transform.scale(Roll,(200,200))
 rollRect = Roll.get_rect(topleft=(649,649))
 roll1=[pygame.image.load("images/dice1.png"),0]
 roll2=[pygame.image.load("images/dice1.png"),0]
@@ -41,6 +41,3 @@ movesLeft=totalRoll
 whiteturn = False
 blackturn = False
 alerts = []
-isResummoningWhite = False
-isResummoningBlack = False
-resummonSpot = -1

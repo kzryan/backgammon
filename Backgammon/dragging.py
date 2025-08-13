@@ -243,23 +243,9 @@ def capture(piece,color):
         c.whitedeadpieces.append((piece))
     elif color == c.gray:
         c.blackpieces.remove(piece)
-        print("In capture, adding to black dead pieces")
-        c.blackdeadpieces.append((piece))
+        c.deadpieces.append((piece,c.color))
     
 
-def checkForResummon():
-    if(len(c.whitedeadRectangles)>0 and c.whiteturn):
-        font = pygame.font.Font(None, 32)
-        alert_text='Click Space to Resummon'
-        text = font.render(alert_text, True, (255,255,255), (0,0,0))
-        c.alerts.append([text,alert_text])
-        
 
-    if(len(c.blackdeadRectangles)>0 and c.blackturn):
-        font = pygame.font.Font(None, 32)
-        alert_text='Click Space to Resummon'
-        text = font.render(alert_text, True, (255,255,255), (0,0,0))
-        c.alerts.append([text,alert_text])
-        for space in c.spaces:
-            if space.collidepoint(pygame.mouse.get_pos()) and c.spaces.index(space)>17:
-                pass
+#Add block space rules
+#Add capture rules
